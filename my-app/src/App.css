@@ -1,0 +1,100 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.App-Body {
+  background-color: #282c34;
+  min-height: 150vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.App-Conteiner {
+  width: auto;
+  display: flex;
+}
+
+.App-Conteiner-div1 {
+  background-color: white;
+  display: block;
+  width: auto;
+  margin: 0 2.5% 0 2.5%;
+  border-radius: 25px;
+}
+
+.App-Conteiner-div2 {
+  display: block;
+  width: auto;
+  margin: 0 2.5% 0 2.5%;
+  height: fit-content;
+}
+
+.App-Conteiner-form {
+  padding: 0 10vh 5vh;
+  display: flex;
+  flex-direction: column;
+  width: auto;
+}
+
+.App-Conteiner-form2 {
+  width: auto;
+  padding: 0 10vh 5vh;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 25px;
+}
+
+.App-Input-form {
+  height: 2.4em;
+  text-align: left;
+}
+
+.App-input-Mask {
+  line-height: 2.5em;
+  border-color: rgba(0, 0, 0, 0.23);
+  border-radius: 4px;
+  border-width: 1px;
+  padding: 0 8px;
+  border-style: solid;
+}
+
+.marginForm1 {
+  margin-right: 70px !important;
+}
+.marginForm2 {
+  margin-right: 30px !important;
+}
+
+.css-j204z7-MuiFormControlLabel-root .MuiFormControlLabel-label {
+  color: black;
+  font-weight: bold;
+}
+
+.App-radio-form-group {
+  flex-wrap: nowrap !important;
+}
+
+.App-Button{
+  color: white !important;
+  background-color: #52ba00 !important;
+  width: 100% !important;
+  margin-top: 5vh !important;
+  padding: 2vh !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  border-radius: 10px !important;
+}
