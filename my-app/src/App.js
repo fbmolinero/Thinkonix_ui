@@ -209,13 +209,13 @@ function App() {
                   onChange={handleChangeZkm}
                 >
                   <FormControlLabel
-                    value="1"
+                    value="Sim"
                     className="marginForm"
                     control={<BpRadio />}
                     label="Sim"
                   />
                   <FormControlLabel
-                    value="2"
+                    value="Não"
                     className="marginForm"
                     control={<BpRadio />}
                     label="Não"
@@ -256,11 +256,11 @@ function App() {
             <div className="App-Conteiner-form2">
               <h4>Condutor</h4>
               <h6>Nome</h6>
-              <FormControl id="inputCep" label="CEP: *">
+              <FormControl id="inputnome" label="Nome: *">
                 <InputMask
                   className="App-input-Mask"
                   name="Nome"
-                  mask=""
+                  mask="a^"
                   maskChar=""
                   alwaysShowMask="true"
                   value={nome}
@@ -297,10 +297,10 @@ function App() {
                 </RadioGroup>
               </FormControl>
               <h6>Data de Nascimento</h6>
-              <FormControl id="inputCep" label="CEP: *">
+              <FormControl id="inputdata" label="DATA: *">
                 <InputMask
                   className="App-input-Mask"
-                  name="cep"
+                  name="data"
                   mask="99/99/99"
                   maskChar=""
                   alwaysShowMask="true"
@@ -338,11 +338,11 @@ function App() {
                 </RadioGroup>
               </FormControl>
               <h6>Telefone</h6>
-              <FormControl id="inputCep" label="CEP: *">
+              <FormControl id="inputtel" label="TEL: *">
                 <InputMask
                   className="App-input-Mask"
-                  name="cep"
-                  mask="99/99/99"
+                  name="tel"
+                  mask="(99)99999-9999"
                   maskChar=""
                   alwaysShowMask="true"
                   value={tel}
@@ -350,11 +350,11 @@ function App() {
                 />
               </FormControl>
               <h6>Email</h6>
-              <FormControl id="inputCep" label="CEP: *">
+              <FormControl id="inputEmail" label="Email: *">
                 <InputMask
                   className="App-input-Mask"
-                  name="cep"
-                  mask="99/99/99"
+                  name="Email"
+                  mask="a^@a^"
                   maskChar=""
                   alwaysShowMask="true"
                   value={email}
