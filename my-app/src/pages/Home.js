@@ -1,43 +1,117 @@
-/* import logo from "./logo.svg"; */
-import "./App.css";
+import "../App.css";
 import React, { useState } from "react";
-/* import InputLabel from "@mui/material/InputLabel"; */
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import InputMask from "react-input-mask";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import BpRadio from "../src/components/RadioButtonCustom.js";
+import BpRadio from "../components/RadioButtonCustom.js";
 import Button from "@mui/material/Button";
+import httpClient from "../services/client.js";
+import axios from "axios";
+import header from "../img/Frame.png"
 
-function App() {
-  const [fabricantes, setFabri] = useState("");
-  const [modelo, setModel] = useState("");
-  const [ano, setAno] = useState("");
+function Home() {
+  const [fabriID, setFabri] = useState("");
+  const [fabricantes, setFabriID] = useState(0);
+  const [fabriname, setFabriName] = useState("");
+  const [fabricantesarr, setFabriArray] = useState([""]);
+  const [modelid, setModel] = useState("");
+  const [modelo, setModelid] = useState(0);
+  const [modelname, setModelName] = useState("");
+  const [modelsarr, setModelArray] = useState([]);
+  const [anoF, setAnoF] = useState();
+  const [anoM, setAnoM] = useState();
   const [combustivel, setCombus] = useState("");
+  const [combusarr, setCombusArr] = useState([]);
   const [cep, setCEP] = useState([]);
   const [rua, setRua] = useState("RUA");
   const [bairro, setBairro] = useState("BAIRRO");
   const [cidade, setCidade] = useState("CIDADE");
   const [estado, setEstado] = useState("ESTADO");
+  const [num, setNum] = useState("");
   const [tel, setTel] = useState("");
   const [data, setData] = useState("");
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [sexo, setSexo] = useState("");
-  const [util, setUtil] = useState("");
+  const [cpf, setCPF] = useState("");
+  const [cnh, setCNH] = useState("");
+  const [util, setUtil] = useState(0);
   const [civil, setCivil] = useState("");
-  const [zkm, setZkm] = useState("");
+  const [zkm, setZkm] = useState(true);
+  const [condição, setCondição] = useState(true);
+  const [status, setStatus] = useState(false);
+
+  localStorage.setItem("status", false);
+
+  const controller = new AbortController();
+  const CancelToken = axios.CancelToken;
+  const source = CancelToken.source();
+
+  if (condição === true) {
+    httpClient
+      .get("/quotation/manufacturers", {
+        cancelToken: source.token,
+        signal: controller.signal,
+      })
+      .then((res) => {
+        setFabriArray(res.data);
+        controller.abort();
+      })
+      .catch((err) => {
+        controller.abort();
+        console.log("Erro ao Buscar Fabricantes");
+      });
+    setCondição(false);
+  } else {
+  }
 
   const handleChangeFabri = (event) => {
-    setFabri(event.target.value);
+    setFabriID(event.target.value);
+    setFabri(event.target.value.id);
+    setFabriName(event.target.value.name);
+    httpClient
+      .get("/quotation/models", {
+        params: { manufacturer_code: event.target.value.id },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setModelArray(res.data);
+        setModelid(res.data.id);
+      })
+      .catch((err) => {
+        console.log("Erro ao Buscar Modelos", err);
+      });
   };
+
   const handleChangeModel = (event) => {
-    setModel(event.target.value);
+    setModelid(event.target.value);
+    setModel(event.target.value.id);
+    setModelName(event.target.value.name);
+    httpClient
+      .get("/quotation/models/years", {
+        params: { model_code: event.target.value.id },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setAnoF(res.data.manufacture_year);
+        setAnoM(res.data.model_year);
+      });
+    httpClient.get("/quotation/fuel_types").then((res) => {
+      console.log(res.data);
+      setCombusArr(res.data);
+    });
   };
-  const handleChangeAno = (event) => {
-    setAno(event.target.value);
+  const handleChangeCPF = (event) => {
+    setCPF(event.target.value);
+  };
+  const handleChangeNum = (event) => {
+    setNum(event.target.value);
+  };
+  const handleChangeCNH = (event) => {
+    setCNH(event.target.value);
   };
   const handleChangeCombus = (event) => {
     setCombus(event.target.value);
@@ -50,39 +124,92 @@ function App() {
   };
 
   const handleChangeNome = (event) => {
-    setNome(event);
+    setNome(event.target.value);
   };
 
   const handleChangeData = (event) => {
-    setData(event);
+    console.log(event.target.value);
+    setData(event.target.value);
   };
 
   const handleChangeEmail = (event) => {
-    setEmail(event);
+    setEmail(event.target.value);
+    setStatus(true);
   };
 
   const handleChangeSexo = (event) => {
     setSexo(event.target.value);
   };
 
-  const handleChangeCivil = (event) =>{
-    setCivil(event.target.value)
-  }
+  const handleChangeCivil = (event) => {
+    setCivil(event.target.value);
+  };
 
-  const handleChangeTel = (event) =>{
-    setTel(event)
-  }
+  const handleChangeTel = (event) => {
+    setTel(event.target.value);
+  };
 
-  const handleChangeUtil = (event) =>{
-    setUtil(event.target.value)
-  }
+  const handleChangeUtil = (event) => {
+    setUtil(event.target.value);
+  };
 
-  const handleChangeZkm = (event) =>{
-    setZkm(event.target.value)
-  }
+  const handleChangeZkm = (event) => {
+    setZkm(event.target.value);
+  };
 
   const handleButtonEvent = (event) => {
-    console.log(sexo,util,civil,zkm,fabricantes,modelo,ano,combustivel)
+    if (status !== false) {
+      httpClient
+        .post("/quotation/quotes", {
+          nome_fabricante: fabriname,
+          codigo_fabricante: fabriID,
+          nome_modelo: modelname,
+          codigo_modelo: modelid,
+          ano_fabricacao: anoF,
+          ano_modelo: anoM,
+          zero_km: zkm,
+          combustivel: combustivel,
+          codigo_uso_veiculo: util,
+          cep: cep,
+          numero_endereco: num,
+          rua: rua,
+          bairro: bairro,
+          cidade: cidade,
+          estado: estado,
+          nome_condutor: nome,
+          data_nascimento_condutor: data,
+          sexo_condutor: sexo,
+          estado_civil_condutor: civil,
+          cpf_condutor: cpf,
+          data_emissao_cnh_condutor: cnh,
+          email_condutor: email,
+          telefone_condutor: tel,
+        })
+        .then((res) => {
+          console.log("POST FEITO COM SUCESSO");
+        })
+        .catch((err) => {
+          console.log(err);
+          console.log(
+            fabriname,
+            fabriID,
+            modelname,
+            modelid,
+            anoF,
+            anoM,
+            zkm,
+            combustivel,
+            util,
+            cep,
+            data,
+            cnh
+          );
+          alert(
+            "Algum Campo em Brancoo ou Preenchido Incorretamente , Favor Verifique Todos os Campos"
+          );
+        });
+    } else {
+    }
   };
 
   const buscarCep = () => {
@@ -108,19 +235,16 @@ function App() {
 
   return (
     <div className="App">
+      <header>
+        <div className="Header-IMG">
+          <img src={header} />
+        </div>
+      </header>
       <body className="App-Body">
-        {/*  <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a> */}
+        <div className="App-logo-div">
+          <h1>Faça Sua Cotação Agora Mesmo!</h1>
+        </div>
+        <h2 className="h2-top">Cotação de Seguro Auto</h2>
         <div className="App-Conteiner">
           <div className="App-Conteiner-div1">
             <div className="App-Conteiner-form">
@@ -135,9 +259,11 @@ function App() {
                   displayEmpty
                   onChange={handleChangeFabri}
                 >
-                  <MenuItem value={10}>Test1</MenuItem>
-                  <MenuItem value={20}>Test2</MenuItem>
-                  <MenuItem value={30}>Test3</MenuItem>
+                  {fabricantesarr.map((option) => (
+                    <MenuItem key={option.id} value={option}>
+                      {option.name}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
               <FormControl sx={{ m: 1, minWidth: 300 }}>
@@ -150,39 +276,43 @@ function App() {
                   displayEmpty
                   onChange={handleChangeModel}
                 >
-                  <MenuItem value={10}>Test1</MenuItem>
-                  <MenuItem value={20}>Test2</MenuItem>
-                  <MenuItem value={30}>Test3</MenuItem>
+                  {modelsarr.map((option) => (
+                    <MenuItem key={option.name} value={option}>
+                      {option.name}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
-              <FormControl sx={{ m: 1, minWidth: 300 }}>
-                <h6>Ano de Fabricação</h6>
-                <Select
-                  labelId="Ano-Select"
-                  className="App-Input-form"
-                  id="Ano-Select"
-                  value={ano}
-                  displayEmpty
-                  onChange={handleChangeAno}
-                >
-                  <MenuItem value={10}>Test1</MenuItem>
-                  <MenuItem value={20}>Test2</MenuItem>
-                  <MenuItem value={30}>Test3</MenuItem>
-                </Select>
+              <h6>Ano de Fabricação</h6>
+              <FormControl id="inputAno" label="Ano: *">
+                <InputMask
+                  className="App-input-Mask"
+                  name="Ano"
+                  maskChar=""
+                  alwaysShowMask="true"
+                  disabled
+                  value={anoM}
+                />
               </FormControl>
               <FormControl sx={{ m: 1, minWidth: 300 }}>
-                <h6>Combustivel</h6>
+                <h6>Combústivel</h6>
                 <Select
-                  labelId="Combustivel-Select"
+                  labelId="Combústivel-Select"
                   className="App-Input-form"
-                  id="Combustivel--Select"
+                  id="Combústivel-Select"
                   value={combustivel}
                   displayEmpty
                   onChange={handleChangeCombus}
                 >
-                  <MenuItem value={10}>Test1</MenuItem>
-                  <MenuItem value={20}>Test2</MenuItem>
-                  <MenuItem value={30}>Test3</MenuItem>
+                  {combusarr.map((option) => (
+                    <MenuItem
+                      key={option.name}
+                      value={option.value}
+                      name={option.name}
+                    >
+                      {option.name}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
               <h6>CEP</h6>
@@ -200,6 +330,18 @@ function App() {
               <p>
                 {rua},{bairro},{cidade},{estado}
               </p>
+              <h6>Nº Endereço / Complemento</h6>
+              <FormControl id="inputNumEnd" label="Nº: *">
+                <InputMask
+                  className="App-input-Mask"
+                  name="num"
+                  mask=""
+                  maskChar=""
+                  alwaysShowMask="true"
+                  value={num}
+                  onChange={handleChangeNum}
+                />
+              </FormControl>
               <h6>Zero KM?</h6>
               <FormControl>
                 <RadioGroup
@@ -209,13 +351,13 @@ function App() {
                   onChange={handleChangeZkm}
                 >
                   <FormControlLabel
-                    value="Sim"
+                    value={true}
                     className="marginForm"
                     control={<BpRadio />}
                     label="Sim"
                   />
                   <FormControlLabel
-                    value="Não"
+                    value={false}
                     className="marginForm"
                     control={<BpRadio />}
                     label="Não"
@@ -231,19 +373,19 @@ function App() {
                   onChange={handleChangeUtil}
                 >
                   <FormControlLabel
-                    value="Lazer"
+                    value={1}
                     className="marginForm"
                     control={<BpRadio />}
                     label="Lazer"
                   />
                   <FormControlLabel
-                    value="Profissional"
+                    value={2}
                     className="marginForm"
                     control={<BpRadio />}
                     label="Profissional"
                   />
                   <FormControlLabel
-                    value="Aplicativo"
+                    value={3}
                     className="marginForm"
                     control={<BpRadio />}
                     label="Aplicativo"
@@ -260,10 +402,10 @@ function App() {
                 <InputMask
                   className="App-input-Mask"
                   name="Nome"
-                  mask="a^"
+                  mask=""
+                  type="name"
                   maskChar=""
                   alwaysShowMask="true"
-                  value={nome}
                   onChange={handleChangeNome}
                 />
               </FormControl>
@@ -301,11 +443,32 @@ function App() {
                 <InputMask
                   className="App-input-Mask"
                   name="data"
-                  mask="99/99/99"
+                  mask="99/99/9999"
                   maskChar=""
                   alwaysShowMask="true"
-                  value={data}
                   onChange={handleChangeData}
+                />
+              </FormControl>
+              <h6>CPF</h6>
+              <FormControl id="inputcpf" label="CPF: *">
+                <InputMask
+                  className="App-input-Mask"
+                  name="CPF"
+                  mask="999.999.999-99"
+                  maskChar=""
+                  alwaysShowMask="true"
+                  onChange={handleChangeCPF}
+                />
+              </FormControl>
+              <h6>Data de Emissão CNH</h6>
+              <FormControl id="inputECNH" label="CNH: *">
+                <InputMask
+                  className="App-input-Mask"
+                  name="Emissão CNH"
+                  mask="99/99/9999"
+                  maskChar=""
+                  alwaysShowMask="true"
+                  onChange={handleChangeCNH}
                 />
               </FormControl>
               <h6>Estado Civil</h6>
@@ -342,10 +505,9 @@ function App() {
                 <InputMask
                   className="App-input-Mask"
                   name="tel"
-                  mask="(99)99999-9999"
-                  maskChar=""
+                  mask="(99) 99999-9999"
+                  maskChar=" "
                   alwaysShowMask="true"
-                  value={tel}
                   onChange={handleChangeTel}
                 />
               </FormControl>
@@ -354,10 +516,9 @@ function App() {
                 <InputMask
                   className="App-input-Mask"
                   name="Email"
-                  mask="a^@a^"
+                  mask=""
                   maskChar=""
                   alwaysShowMask="true"
-                  value={email}
                   onChange={handleChangeEmail}
                 />
               </FormControl>
@@ -372,4 +533,4 @@ function App() {
   );
 }
 
-export default App;
+export default Home;
