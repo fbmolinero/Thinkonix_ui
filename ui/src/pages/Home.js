@@ -75,7 +75,7 @@ function Home() {
       })
       .catch((err) => {
         controller.abort();
-        console.log("Erro ao Buscar Fabricantes");
+        alert("Erro ao Buscar Fabricantes");
       });
     setCondição(false);
   } else {
@@ -90,12 +90,11 @@ function Home() {
         params: { manufacturer_code: event.target.value.id },
       })
       .then((res) => {
-        console.log(res.data);
         setModelArray(res.data);
         setModelid(res.data.id);
       })
       .catch((err) => {
-        console.log("Erro ao Buscar Modelos", err);
+        alert("Erro ao Buscar Modelos");
       });
   };
 
@@ -108,12 +107,10 @@ function Home() {
         params: { model_code: event.target.value.id },
       })
       .then((res) => {
-        console.log(res.data);
         setAnoF(res.data.manufacture_year);
         setAnoM(res.data.model_year);
       });
     httpClient.get("/quotation/fuel_types").then((res) => {
-      console.log(res.data);
       setCombusArr(res.data);
     });
   };
@@ -164,11 +161,10 @@ function Home() {
 
   const handleChangeEmail = (event) => {
     const mail = validator.isEmail(event.target.value);
-    console.log(mail);
     if (mail === true && event.target.value.includes(".com") === true) {
       setEmail(event.target.value);
       setStatus(true);
-      console.log("Email Valido");
+      alert("Email Valido");
     } else if (mail === false && event.target.value.includes(".com") === true) {
       alert("Email Inválido");
     } else {

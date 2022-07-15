@@ -38,7 +38,7 @@ function Loading() {
   const tel = localStorage.getItem("telefone_condutor");
   const val = zkm === "true";
 
-  console.log(
+/*   console.log(
     fabriname,
     fabriID,
     modelname,
@@ -62,7 +62,7 @@ function Loading() {
     cnh,
     email,
     tel
-  );
+  ); */
 
   if (status !== false && status2 !== false) {
     httpClient
@@ -90,32 +90,9 @@ function Loading() {
         data_emissao_cnh_condutor: cnh,
         email_condutor: email,
         telefone_condutor: tel,
-        /*         nome_fabricante: "FIAT",
-        codigo_fabricante: "34",
-        nome_modelo: "ARGO 1.0 6V Flex.",
-        codigo_modelo: "001509-1",
-        ano_fabricacao: 2018,
-        ano_modelo: 2019,
-        zero_km: false,
-        combustivel: "GASOLINA",
-        codigo_uso_veiculo: "1",
-        cep: "58045-100",
-        numero_endereco: "131 / 501",
-        rua: "Avenida Cairu",
-        bairro: "Cabo Branco",
-        cidade: "João Pessoa",
-        estado: "PB",
-        nome_condutor: "Fabio Teste OFF",
-        data_nascimento_condutor: "2022-07-14",
-        sexo_condutor: "M",
-        estado_civil_condutor: "SOLTEIRO",
-        cpf_condutor: "168.690.057.02",
-        data_emissao_cnh_condutor: "2022-07-14",
-        email_condutor: "fabiomolineroramos@gmail.com",
-        telefone_condutor: "(83)98165-4319", */
       })
       .then((res) => {
-        console.log("POST FEITO COM SUCESSO");
+        console.log("FEITO COM SUCESSO");
         localStorage.setItem(
           "Assis24hr",
           res.data.mao_na_roda.data.data.valor_assistencia24hs_ate100km
@@ -151,7 +128,6 @@ function Loading() {
         history.push("/finalpage");
       })
       .catch((err) => {
-        console.log(err);
         alert(
           "Erro ao Processar seus Dados , Favor Retornar a Pagina Anterior !"
         );
