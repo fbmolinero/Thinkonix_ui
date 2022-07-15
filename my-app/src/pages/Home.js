@@ -1,5 +1,6 @@
 import "../App.css";
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
@@ -9,10 +10,21 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import BpRadio from "../components/RadioButtonCustom.js";
 import Button from "@mui/material/Button";
 import httpClient from "../services/client.js";
+import { cpf } from "cpf-cnpj-validator";
+import validator from "validator";
 import axios from "axios";
-import header from "../img/Frame.png"
+import header from "../img/Frame.png";
 
 function Home() {
+  let history = useHistory();
+
+  localStorage.removeItem("Assis24hr");
+  localStorage.removeItem("GuinchoIli");
+  localStorage.removeItem("P_reparo");
+  localStorage.removeItem("AssisResidencial");
+  localStorage.removeItem("DanosT");
+  localStorage.removeItem("Furtos");
+
   const [fabriID, setFabri] = useState("");
   const [fabricantes, setFabriID] = useState(0);
   const [fabriname, setFabriName] = useState("");
@@ -36,7 +48,7 @@ function Home() {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [sexo, setSexo] = useState("");
-  const [cpf, setCPF] = useState("");
+  const [cpfinput, setCPF] = useState("");
   const [cnh, setCNH] = useState("");
   const [util, setUtil] = useState(0);
   const [civil, setCivil] = useState("");
@@ -45,6 +57,7 @@ function Home() {
   const [status, setStatus] = useState(false);
 
   localStorage.setItem("status", false);
+  localStorage.setItem("status2", false);
 
   const controller = new AbortController();
   const CancelToken = axios.CancelToken;
@@ -105,13 +118,27 @@ function Home() {
     });
   };
   const handleChangeCPF = (event) => {
-    setCPF(event.target.value);
+    const cpfvalid2 = reverseString(event.target.value);
+    function reverseString(str) {
+      return str.split(".").join("").split("-").join("");
+    }
+    const valicpf = cpf.isValid(cpfvalid2);
+    if (valicpf === true) {
+      setCPF(cpfvalid2);
+    } else if (cpfvalid2.length === 11) {
+      alert("CPF Não Valido");
+    } else {
+    }
   };
   const handleChangeNum = (event) => {
     setNum(event.target.value);
   };
   const handleChangeCNH = (event) => {
-    setCNH(event.target.value);
+    const revstr = reverseString(event.target.value);
+    function reverseString(str) {
+      return str.split("-").reverse().join("-");
+    }
+    setCNH(revstr);
   };
   const handleChangeCombus = (event) => {
     setCombus(event.target.value);
@@ -128,13 +155,24 @@ function Home() {
   };
 
   const handleChangeData = (event) => {
-    console.log(event.target.value);
-    setData(event.target.value);
+    const revstr = reverseString(event.target.value);
+    function reverseString(str) {
+      return str.split("-").reverse().join("-");
+    }
+    setData(revstr);
   };
 
   const handleChangeEmail = (event) => {
-    setEmail(event.target.value);
-    setStatus(true);
+    const mail = validator.isEmail(event.target.value);
+    console.log(mail);
+    if (mail === true && event.target.value.includes(".com") === true) {
+      setEmail(event.target.value);
+      setStatus(true);
+      console.log("Email Valido");
+    } else if (mail === false && event.target.value.includes(".com") === true) {
+      alert("Email Inválido");
+    } else {
+    }
   };
 
   const handleChangeSexo = (event) => {
@@ -158,57 +196,45 @@ function Home() {
   };
 
   const handleButtonEvent = (event) => {
-    if (status !== false) {
-      httpClient
-        .post("/quotation/quotes", {
-          nome_fabricante: fabriname,
-          codigo_fabricante: fabriID,
-          nome_modelo: modelname,
-          codigo_modelo: modelid,
-          ano_fabricacao: anoF,
-          ano_modelo: anoM,
-          zero_km: zkm,
-          combustivel: combustivel,
-          codigo_uso_veiculo: util,
-          cep: cep,
-          numero_endereco: num,
-          rua: rua,
-          bairro: bairro,
-          cidade: cidade,
-          estado: estado,
-          nome_condutor: nome,
-          data_nascimento_condutor: data,
-          sexo_condutor: sexo,
-          estado_civil_condutor: civil,
-          cpf_condutor: cpf,
-          data_emissao_cnh_condutor: cnh,
-          email_condutor: email,
-          telefone_condutor: tel,
-        })
-        .then((res) => {
-          console.log("POST FEITO COM SUCESSO");
-        })
-        .catch((err) => {
-          console.log(err);
-          console.log(
-            fabriname,
-            fabriID,
-            modelname,
-            modelid,
-            anoF,
-            anoM,
-            zkm,
-            combustivel,
-            util,
-            cep,
-            data,
-            cnh
-          );
-          alert(
-            "Algum Campo em Brancoo ou Preenchido Incorretamente , Favor Verifique Todos os Campos"
-          );
-        });
+    localStorage.setItem("nome_fabricante", fabriname);
+    localStorage.setItem("codigo_fabricante", fabriID);
+    localStorage.setItem("nome_modelo", modelname);
+    localStorage.setItem("codigo_modelo", modelid);
+    localStorage.setItem("ano_fabricacao", anoF);
+    localStorage.setItem("ano_modelo", anoM);
+    localStorage.setItem("zero_km", zkm);
+    localStorage.setItem("combustivel", combustivel);
+    localStorage.setItem("codigo_uso_veiculo", util);
+    localStorage.setItem("cep", cep);
+    localStorage.setItem("numero_endereco", num);
+    localStorage.setItem("rua", rua);
+    localStorage.setItem("bairro", bairro);
+    localStorage.setItem("cidade", cidade);
+    localStorage.setItem("estado", estado);
+    localStorage.setItem("nome_condutor", nome);
+    localStorage.setItem("data_nascimento_condutor", data);
+    localStorage.setItem("sexo_condutor", sexo);
+    localStorage.setItem("estado_civil_condutor", civil);
+    localStorage.setItem("cpf_condutor", cpfinput);
+    localStorage.setItem("data_emissao_cnh_condutor", cnh);
+    localStorage.setItem("email_condutor", email);
+    localStorage.setItem("telefone_condutor", tel);
+
+    if (email !== "") {
+      localStorage.setItem("status", status);
     } else {
+      alert(
+        "Algum Campo em Brancoo ou Preenchido Incorretamente , Favor Verifique Todos os Campos"
+      );
+    }
+
+    if (status !== false) {
+      localStorage.setItem("status2", true);
+      history.push("/loadingpage");
+    } else {
+      alert(
+        "Algum Campo em Brancoo ou Preenchido Incorretamente , Favor Verifique Todos os Campos"
+      );
     }
   };
 
@@ -419,22 +445,22 @@ function Home() {
                   onChange={handleChangeSexo}
                 >
                   <FormControlLabel
-                    value="Outro"
+                    value="O"
                     className="marginForm2"
                     control={<BpRadio />}
                     label="Outro"
                   />
                   <FormControlLabel
-                    value="Femenino"
+                    value="F"
                     className="marginForm2"
                     control={<BpRadio />}
                     label="Femenino"
                   />
                   <FormControlLabel
-                    value="Mascolino"
+                    value="M"
                     className="marginForm2"
                     control={<BpRadio />}
-                    label="Mascolino"
+                    label="Masculino"
                   />
                 </RadioGroup>
               </FormControl>
@@ -443,7 +469,7 @@ function Home() {
                 <InputMask
                   className="App-input-Mask"
                   name="data"
-                  mask="99/99/9999"
+                  mask="99-99-9999"
                   maskChar=""
                   alwaysShowMask="true"
                   onChange={handleChangeData}
@@ -465,7 +491,7 @@ function Home() {
                 <InputMask
                   className="App-input-Mask"
                   name="Emissão CNH"
-                  mask="99/99/9999"
+                  mask="99-99-9999"
                   maskChar=""
                   alwaysShowMask="true"
                   onChange={handleChangeCNH}
@@ -481,19 +507,19 @@ function Home() {
                   onChange={handleChangeCivil}
                 >
                   <FormControlLabel
-                    value="Solteiro"
+                    value="SOLTEIRO"
                     className="marginForm2"
                     control={<BpRadio />}
                     label="Solteiro"
                   />
                   <FormControlLabel
-                    value="Casado"
+                    value="CASADO"
                     className="marginForm2"
                     control={<BpRadio />}
                     label="Casado"
                   />
                   <FormControlLabel
-                    value="Viuvo/a"
+                    value="VIUVO/A"
                     className="marginForm2"
                     control={<BpRadio />}
                     label="Viuvo/a"

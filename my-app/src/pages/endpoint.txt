@@ -56,3 +56,54 @@
     }
   }
 ]
+
+{
+  "nome_fabricante": "FIAT",
+  "codigo_fabricante": "34",
+  "nome_modelo": "ARGO 1.0 6V Flex.",
+  "codigo_modelo": "001509-1",
+  "ano_fabricacao": 2018,
+  "ano_modelo": 2019,
+  "zero_km": true,
+  "combustivel": "GASOLINA",
+  "codigo_uso_veiculo": "1",
+  "cep": "58045-100",
+  "numero_endereco": "131 / 501",
+  "rua": "Avenida Cairu",
+  "bairro": "Cabo Branco",
+  "cidade": "João Pessoa",
+  "estado": "PB",
+  "nome_condutor": "Fabio Teste OFF",
+  "data_nascimento_condutor": "2022-07-14",
+  "sexo_condutor": "M",
+  "estado_civil_condutor": "SOLTEIRO",
+  "cpf_condutor": "168.690.057.02",
+  "data_emissao_cnh_condutor": "2022-07-14",
+  "email_condutor": "fabiomolineroramos@gmail.com",
+  "telefone_condutor": "(83)98165-4319"
+}
+{
+  "ano_fabricacao": 2018
+  "ano_modelo": 2019
+  "bairro": "Cabo Branco"
+  "cep": "58045-100"
+  "cidade": "João Pessoa"
+  "codigo_fabricante": "34"
+  "codigo_modelo": "001509-1"
+  "codigo_uso_veiculo": "1"
+  "combustivel": "GASOLINA"
+  "cpf_condutor": "168.690.057-02"
+  "data_emissao_cnh_condutor": "1010-01-01"
+  "data_nascimento_condutor": "1997-05-03"
+  "email_condutor": "fabiomolineroramos@gmail.com"
+  "estado": "PB"
+  "estado_civil_condutor": "SOLTEIRO"
+  "nome_condutor": "Fabio Luiz"
+  "nome_fabricante": "FIAT"
+  "nome_modelo": "ARGO 1.0 6V Flex."
+  "numero_endereco": "131 / 501"
+  "rua": "Avenida Cairu"
+  "sexo_condutor": "M"
+  "telefone_condutor": "(83)98165-4319"
+  "zero_km": true
+}
